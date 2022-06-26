@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ItemsActivity : AppCompatActivity(), OnItemClickListener {
 
@@ -80,12 +81,15 @@ class ItemsActivity : AppCompatActivity(), OnItemClickListener {
                     val item =Items(name, groupWithItems.group.name,false)
                     groupWithItems.items.add(item)
 
+                    itemsAdapter!!.notifyItemInserted(groupWithItems.items.size)
+
                     CoroutineScope(Dispatchers.IO).launch{
                         AppData.db.todoDao().insertItem(item)
+
                     }
 
 
-                    itemsAdapter!!.notifyItemInserted(groupWithItems.items.count())
+
                     newItemEditText.text.clear()
 
                     val inputManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -116,6 +120,7 @@ class ItemsActivity : AppCompatActivity(), OnItemClickListener {
     override fun finish() {
         super.finish()
         overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right)
+
     }
 
 }

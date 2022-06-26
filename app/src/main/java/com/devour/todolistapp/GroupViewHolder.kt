@@ -11,6 +11,7 @@ class GroupsViewHolder (inflater: LayoutInflater, parent: ViewGroup) : RecyclerV
     private var groupCountTextView: TextView? = null
 
     init {
+
         groupCountTextView = itemView.findViewById(R.id.groupCountTextView)
         groupNameTextView = itemView.findViewById(R.id.groupnameTextView)
     }

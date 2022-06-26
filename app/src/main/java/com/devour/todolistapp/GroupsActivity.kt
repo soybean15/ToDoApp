@@ -66,9 +66,9 @@ class GroupsActivity : AppCompatActivity(), OnGroupClickListener {
 
         groupRecyclerView.layoutManager = LinearLayoutManager(this)
 
-//        AppData.initialize()
-//        groupsAdapter = GroupsAdapter(AppData.groups, this)
-//        groupRecyclerView.adapter = groupsAdapter
+        AppData.initialize()
+        groupsAdapter = GroupsAdapter(AppData.groups, this)
+        groupRecyclerView.adapter = groupsAdapter
 
         AppData.db = TodoDatabase.getDatabase(this)!!
 
@@ -127,12 +127,13 @@ class GroupsActivity : AppCompatActivity(), OnGroupClickListener {
 
             AppData.groups.add(newGroupWithItems)
 
-            groupsAdapter!!.notifyItemInserted(AppData.groups.count())
+
 
             CoroutineScope(Dispatchers.IO).launch {
                 AppData.db.todoDao().insertGroup(newGroup)
 
             }
+            groupsAdapter!!.notifyItemInserted(AppData.groups.count())
 
         }
         builder.setNegativeButton("Cancel") {dialogue, which->
@@ -145,7 +146,9 @@ class GroupsActivity : AppCompatActivity(), OnGroupClickListener {
 
     override fun onResume() {
         super.onResume()
-        //groupsAdapter!!.notifyDataSetChanged()
+        //groupsAdapter!!.notifyItemChanged(AppData.groups.count())
+        //groupsAdapter!!.
+       groupsAdapter!!.notifyDataSetChanged()
     }
 
 
