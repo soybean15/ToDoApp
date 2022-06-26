@@ -72,13 +72,19 @@ class GroupsActivity : AppCompatActivity(), OnGroupClickListener {
 
         AppData.db = TodoDatabase.getDatabase(this)!!
 
+        dbConnect(groupRecyclerView)
+    }
+
+
+    private fun dbConnect(recyclerView: RecyclerView){
+
         if(databaseFileExist()){//read content
             CoroutineScope(Dispatchers.IO).launch {
                 AppData.groups =AppData.db.todoDao().getGroupWithItems()
 
                 withContext(Dispatchers.Main){
                     groupsAdapter = GroupsAdapter(AppData.groups, this@GroupsActivity)
-                    groupRecyclerView.adapter = groupsAdapter
+                    recyclerView.adapter = groupsAdapter
                 }
             }
 
@@ -86,7 +92,7 @@ class GroupsActivity : AppCompatActivity(), OnGroupClickListener {
         }else{//first Time opening the app
             AppData.initialize()
             groupsAdapter = GroupsAdapter(AppData.groups, this)
-            groupRecyclerView.adapter = groupsAdapter
+            recyclerView.adapter = groupsAdapter
 
             CoroutineScope(Dispatchers.IO).launch {
                 for (groupWithItems in AppData.groups) {
@@ -99,7 +105,6 @@ class GroupsActivity : AppCompatActivity(), OnGroupClickListener {
             }
         }
     }
-
 
 
 
@@ -146,9 +151,10 @@ class GroupsActivity : AppCompatActivity(), OnGroupClickListener {
 
     override fun onResume() {
         super.onResume()
-        //groupsAdapter!!.notifyItemChanged(AppData.groups.count())
-        //groupsAdapter!!.
-       groupsAdapter!!.notifyDataSetChanged()
+        val groupRecyclerView :RecyclerView = findViewById(R.id.groupsRecyclerView)
+        dbConnect(groupRecyclerView)
+
+        groupsAdapter!!.notifyDataSetChanged()
     }
 
 

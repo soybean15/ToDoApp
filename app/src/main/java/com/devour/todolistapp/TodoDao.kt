@@ -24,8 +24,8 @@ interface  TodoDao{
     @Query("Delete from Groups where group_name=:groupName")
     suspend fun deleteGroup(groupName: String)
 
-    @Query("Delete from Items where group_name=:groupName and item_name=:itemName")
-    suspend fun deleteItem(groupName: String, itemName:String)
+    @Query("Delete from Items where group_name=:groupName and id=:id")
+    suspend fun deleteItem(groupName: String, id:Int)
 
     @Query("Delete from Items where group_name=:groupName")
     suspend fun deleteItemOfGroup(groupName:String)

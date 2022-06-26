@@ -40,16 +40,17 @@ class ItemsActivity : AppCompatActivity(), OnItemClickListener {
 
     override fun itemLongClicked(index: Int) {
         val groupName = groupWithItems.group.name
-        val itemName = groupWithItems.items[index].name
+        val id = groupWithItems.items[index].id
 
         CoroutineScope(Dispatchers.IO).launch {
-            AppData.db.todoDao().deleteItem(groupName,itemName)
+            AppData.db.todoDao().deleteItem(groupName,id)
         }
 
 
         groupWithItems.items.removeAt(index)
         itemsAdapter!!.notifyItemRemoved(index)
-        itemsAdapter!!.notifyItemRangeChanged(index,groupWithItems.items.size)
+        itemsAdapter!!.notifyDataSetChanged()
+        //itemsAdapter!!.notifyItemRangeChanged(index,groupWithItems.items.size)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,7 +82,7 @@ class ItemsActivity : AppCompatActivity(), OnItemClickListener {
                     val item =Items(name, groupWithItems.group.name,false)
                     groupWithItems.items.add(item)
 
-                    itemsAdapter!!.notifyItemInserted(groupWithItems.items.size)
+                    itemsAdapter!!.notifyItemInserted(groupWithItems.items.count())
 
                     CoroutineScope(Dispatchers.IO).launch{
                         AppData.db.todoDao().insertItem(item)
